@@ -1,0 +1,41 @@
+import casa.*
+
+describe "Casa de Pepe y Julián"{
+	
+	test "Romper algo de $1000, víveres suficientes, hay que hacer reparaciones y no está en orden."{
+		casaDePepeYJulian.romperAlgo(1000)
+		assert.that(casaDePepeYJulian.tieneViveresSuficientes())
+		assert.that(casaDePepeYJulian.hayQueHacerReparaciones())
+		assert.notThat(casaDePepeYJulian.laCasaEstaEnOrden())
+	}
+	
+	test "Depósito de $1000 en cuenta vacía con $20 de costo por operación"{
+		cuentaConGastos.costoPorOperacion(20)
+		cuentaConGastos.depositar(1000)
+		assert.equals(980, cuentaConGastos.saldo())
+	}
+	
+	test "Cuenta combinada, la primaria es cuenta con gastos de $50 y la secundaria es la cuenta corriente con $500. Déposito y extracción en cuentas"{
+		cuentaCombinada.cuentaPrimaria(cuentaConGastos)
+		cuentaConGastos.costoPorOperacion(50)
+		cuentaCombinada.cuentaSecundaria(cuentaCorriente)
+		cuentaCorriente.saldo(500)
+		cuentaCombinada.depositar(100)
+		assert.equals(50, cuentaCombinada.cuentaPrimaria().saldo())
+		cuentaCombinada.extraer(200)
+		assert.equals(300, cuentaCombinada.cuentaSecundaria().saldo())
+		assert.equals(350, cuentaCombinada.saldo())
+	}
+	
+	test "Casa con 50% de víveres, necesita $100 para reparaciones, asociada a cuenta corriente con $1000 y estrategia de ahorro full."{
+		casaDePepeYJulian.viveres(50)
+		casaDePepeYJulian.reparaciones(100)
+		casaDePepeYJulian.cuenta(cuentaCorriente)
+		cuentaCorriente.saldo(1000)
+		casaDePepeYJulian.estrategiaDeAhorro(full)
+		casaDePepeYJulian.mantener()
+		assert.equals(90, casaDePepeYJulian.viveres())
+		assert.equals(100, casaDePepeYJulian.reparaciones())
+		assert.equals(800, casaDePepeYJulian.cuenta().saldo())
+		}
+}
